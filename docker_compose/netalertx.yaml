@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  netalertx:
+    image: ghcr.io/jokob-sk/netalertx:latest
+    container_name: netalertx
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - TZ=Europe/Warsaw
+      - PUID=1000
+      - PGID=1000
+      - PORT=20211
+    volumes:
+      - netalertx_config:/app/config
+      - netalertx_db:/app/db
+      - netalertx_logs:/app/front/log
+
+volumes:
+  netalertx_config:
+  netalertx_db:
+  netalertx_logs:

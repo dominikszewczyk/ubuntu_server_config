@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:latest
+    container_name: heimdall
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - ALLOW_INTERNAL_REQUESTS=false #optional
+      - TZ=Europe/Warsaw
+    volumes:
+      - heimdall_data:/config
+    ports:
+      - 8080:80
+      - 8443:443
+    restart: unless-stopped
+
+volumes:
+  heimdall_data:

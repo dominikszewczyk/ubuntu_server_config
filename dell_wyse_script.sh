@@ -35,8 +35,11 @@ sudo apt install -y \
 echo '▶️ Instalacja środowiska XFCE4 i xRDP...'
 sudo apt install -y xfce4 xfce4-goodies xrdp || { echo '❌ Błąd podczas instalacji XFCE4/xRDP.'; exit 1; }
 sudo apt install -y lightdm || { echo '❌ Błąd podczas instalacji lightdm.'; exit 1; }
+sudo dpkg-reconfigure lightdm
 sudo bash -c 'echo "[Seat:*]\nuser-session=xfce" > /etc/lightdm/lightdm.conf'
 sudo sed -i 's|^test -x /etc/X11/Xsession && exec /etc/X11/Xsession|startxfce4|g' /etc/xrdp/startwm.sh
+echo xfce4-session > ~/.xsession
+chmod +x ~/.xsession
 sudo systemctl enable xrdp || { echo '❌ Błąd podczas aktywacji xrdp.'; exit 1; }
 sudo systemctl restart xrdp || { echo '❌ Błąd podczas restartu xrdp.'; exit 1; }
 
@@ -54,6 +57,10 @@ sudo ufw allow 2222/tcp         # SSH (nowy port)
 sudo ufw allow 3389/tcp         # xRDP
 sudo ufw allow 80,443/tcp       # HTTP/HTTPS (dla Portainera itd.)
 sudo ufw allow 8123/tcp         # Home Assistant
+sudo ufw allow 8581/tcp         # Homebridge UI
+sudo ufw allow 8080/tcp         # NetAlertX
+sudo ufw allow 8000/tcp         # Speedtest Tracker
+sudo ufw allow 8086/tcp        # InfluxDB 
 sudo ufw enable || { echo '❌ Błąd podczas aktywacji UFW.'; exit 1; }
 
 # 🔹 Instalacja Docker + Compose

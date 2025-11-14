@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  speedtest-tracker:
+    image: lscr.io/linuxserver/speedtest-tracker:latest
+    container_name: speedtest-tracker
+    restart: unless-stopped
+    ports:
+      - 8765:80
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - ADMIN_NAME=<admin_username>
+      - ADMIN_EMAIL=<email_address>
+      - ADMIN_PASSWORD=<password>
+      - TZ=Europe/Warsaw
+      - APP_KEY=<APP_KEY>
+      - APP_URL=<APP_URL>
+      - DB_CONNECTION=sqlite
+      - SPEEDTEST_SCHEDULE="*/15 * * * *"
+      - DISPLAY_TIMEZONE=Europe/Warsaw
+      - PRUNE_RESULTS_OLDER_THAN=0
+    volumes:
+      - speedtest-data:/config
+    networks:
+      - monitoring_net
+
+networks:
+  monitoring_net:
+    external: true
+
+volumes:
+  speedtest-data:

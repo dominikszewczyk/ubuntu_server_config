@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  netdata:
+    image: netdata/netdata:latest
+    container_name: netdata
+    ports:
+      - 19999:19999
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - netdata_config:/etc/netdata
+      - netdata_lib:/var/lib/netdata
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+    environment:
+      - PGID=1000
+      - PUID=1000
+    restart: unless-stopped
+
+volumes:
+  netdata_config:
+  netdata_lib:

@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: tailscale
+    hostname: dell-wyse-vpn
+    network_mode: "host"
+    restart: unless-stopped
+
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_MODULE
+
+    environment:
+      # Gdzie Tailscale zapisuje swój stan (widoczne w Portainer jako named volume)
+      - TS_STATE_DIR=/var/lib/tailscale
+
+      # Router podsieci LAN
+      - TS_ROUTES=192.168.0.0/24
+
+      # Dodatkowe argumenty dla `tailscale up`
+      # Tutaj włączamy exit node, magicdns i routing
+      - TS_EXTRA_ARGS=--advertise-exit-node --advertise-routes=192.168.0.0/24 --accept-routes --accept-dns
+
+    volumes:
+      - tailscale-data:/var/lib/tailscale
+
+volumes:
+  tailscale-data:
+    name: tailscale-data
